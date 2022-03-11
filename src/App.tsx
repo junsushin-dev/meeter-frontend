@@ -1,6 +1,5 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import TimeSlot from './TimeSlot';
 
 const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 const hours = new Array(24).fill(0).map((_, index) => index.toString().padStart(2, '0') + ":00");
@@ -15,7 +14,7 @@ function App() {
       {days.map(dayName => (
         <div key={dayName} className='grid-column'>
           <div className='grid-cell'>{dayName}</div>
-          {hours.map(hour => <div className='grid-cell'/>)}
+          {hours.map(hour => <TimeSlot />)}
         </div>
       ))}
     </div>
