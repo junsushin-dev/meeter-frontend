@@ -1,9 +1,11 @@
-import { useState } from 'react';
 
-export default function TimeSlot() {
-  const [isSelected, setIsSelected] = useState(false);
+interface TimeSlotProps {
+  dataKey: string; 
+  selected?: boolean;
+}
 
+export default function TimeSlot({ selected, dataKey }: TimeSlotProps) {
   return (
-    <div className={`grid-cell ${isSelected ? 'selected': ''}`} onClick={() => setIsSelected(prev => !prev)} />
+    <div className={`grid-cell selectable ${selected ? 'selected': ''}`} data-key={dataKey} />
   )
 }
