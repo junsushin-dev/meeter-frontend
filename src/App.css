@@ -16,3 +16,7 @@
 .timetable {
   display: flex;
 }
+
+.App {
+  display: flex;
+}

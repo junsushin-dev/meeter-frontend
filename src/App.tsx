@@ -3,11 +3,20 @@ import './App.css';
 import TimeSlot from './TimeSlot';
 import SelectionArea, { SelectionEvent } from "@viselect/react";
 
+const names = ['Junsu', 'Junki', 'Sangeun'];
 const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 const hours = new Array(24).fill(0).map((_, index) => index.toString().padStart(2, '0') + ":00");
 
+// interface Person {
+//   name: string;
+//   schedule: Set<string>;
+// }
+
 function App() {
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
+  // const [people, setPeople] = useState<Person[]>(names.map(name => ({ name, schedule: new Set() })));
+  // const [selectedPersonIndex, setSelectedPersonIndex] = useState(0);
+
   const extractIds = (els: Element[]): string[] =>
   els
     .map((v) => v.getAttribute("data-key"))
@@ -51,6 +60,14 @@ function App() {
           </div>
         ))}
       </SelectionArea>
+      <div>
+        {names.map(name => (
+          <div key={name}>
+            <input type="radio" id={`name-${name}`} name="name" />
+            <label htmlFor={`name-${name}`}>{name}</label>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
