@@ -9,10 +9,6 @@
   height: 30px;
 }
 
-.grid-cell.selected {
-  background-color: greenyellow;
-}
-
 .timetable {
   display: flex;
 }

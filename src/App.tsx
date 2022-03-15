@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import './App.css';
 import TimeSlot from './TimeSlot';
 import SelectionArea, { SelectionEvent } from "@viselect/react";
@@ -7,15 +7,14 @@ const names = ['Junsu', 'Junki', 'Sangeun'];
 const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
 const hours = new Array(24).fill(0).map((_, index) => index.toString().padStart(2, '0') + ":00");
 
-// interface Person {
-//   name: string;
-//   schedule: Set<string>;
-// }
+interface Person {
+  name: string;
+  schedule: Set<string>;
+}
 
 function App() {
-  const [selected, setSelected] = useState<Set<string>>(() => new Set());
-  // const [people, setPeople] = useState<Person[]>(names.map(name => ({ name, schedule: new Set() })));
-  // const [selectedPersonIndex, setSelectedPersonIndex] = useState(0);
+  const [people, setPeople] = useState<Person[]>(names.map(name => ({ name, schedule: new Set() })));
+  const selectedPersonIndexRef = useRef(0);
 
   const extractIds = (els: Element[]): string[] =>
   els
@@ -26,7 +25,15 @@ function App() {
   const onStart = ({ event, selection }: SelectionEvent) => {
     if (!event?.ctrlKey && !event?.metaKey) {
       selection.clearSelection();
-      setSelected(() => new Set());
+      setPeople(prev => {
+        const selectedPersonIndex = selectedPersonIndexRef.current;
+        const selectedPerson = prev[selectedPersonIndex];
+        return [
+          ...prev.slice(0, selectedPersonIndex),
+          { ...selectedPerson, schedule: new Set() },
+          ...prev.slice(selectedPersonIndex + 1),
+        ]
+      }) 
     }
   };
 
@@ -35,13 +42,25 @@ function App() {
       changed: { added, removed }
     }
   }: SelectionEvent) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
+    setPeople((prev) => {
+      console.log(prev);
+      const selectedPersonIndex = selectedPersonIndexRef.current;
+      const selectedPerson = prev[selectedPersonIndex];
+      const next = new Set(selectedPerson.schedule);
       extractIds(added).forEach((id) => next.add(id));
       extractIds(removed).forEach((id) => next.delete(id));
-      return next;
-    });
+      return [
+        ...prev.slice(0, selectedPersonIndex),
+        { ...selectedPerson, schedule: next },
+        ...prev.slice(selectedPersonIndex + 1),
+      ]
+    })
   };
+
+  const handlePersonChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedIndex = parseInt(event.target.value);
+    selectedPersonIndexRef.current = selectedIndex;
+  }
   
   return (
     <div className="App">
@@ -55,15 +74,16 @@ function App() {
             <div className='grid-cell'>{dayName}</div>
             {hours.map(hour => {
               const dataKey = `${dayName}-${hour}`;
-              return <TimeSlot selected={selected.has(dataKey)} key={dataKey} dataKey={dataKey} />
+              const selectedRatio = people.filter(person => person.schedule.has(dataKey)).length / people.length;
+              return <TimeSlot opacity={selectedRatio} key={dataKey} dataKey={dataKey} />
             })}
           </div>
         ))}
       </SelectionArea>
       <div>
-        {names.map(name => (
+        {names.map((name, index) => (
           <div key={name}>
-            <input type="radio" id={`name-${name}`} name="name" />
+            <input type="radio" id={`name-${name}`} name="name" value={index} defaultChecked={index === selectedPersonIndexRef.current} onChange={handlePersonChange} />
             <label htmlFor={`name-${name}`}>{name}</label>
           </div>
         ))}
