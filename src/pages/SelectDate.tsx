@@ -1,5 +1,4 @@
 import { ChangeEvent, useRef, useState } from "react";
-import "./App.css";
 import TimeSlot from "../components/TimeSlot";
 import SelectionArea, { SelectionEvent } from "@viselect/react";
 
