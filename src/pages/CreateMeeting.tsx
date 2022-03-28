@@ -1,5 +1,3 @@
 export default function CreateMeeting() {
-  return (
-    <div>CreateMeeting</div>
-  )
+  return <div>CreateMeeting</div>;
 }
