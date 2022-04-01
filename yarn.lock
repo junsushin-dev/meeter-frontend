@@ -2046,6 +2046,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/icons-material@npm:^5.5.1":
+  version: 5.5.1
+  resolution: "@mui/icons-material@npm:5.5.1"
+  dependencies:
+    "@babel/runtime": ^7.17.2
+  peerDependencies:
+    "@mui/material": ^5.0.0
+    "@types/react": ^16.8.6 || ^17.0.0
+    react: ^17.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 9b3430d99607ad243632cdc91c51a5115df35cf6c235165fe1ba5c1245e64ca6da107717e26d2e9f9b54f63c37663a90b74b54b906ab877dbd8bd8548398db42
+  languageName: node
+  linkType: hard
+
 "@mui/material@npm:^5.5.2":
   version: 5.5.2
   resolution: "@mui/material@npm:5.5.2"
@@ -8407,6 +8423,7 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.8.2
     "@emotion/styled": ^11.8.1
+    "@mui/icons-material": ^5.5.1
     "@mui/material": ^5.5.2
     "@testing-library/jest-dom": ^5.16.2
     "@testing-library/react": ^12.1.3
