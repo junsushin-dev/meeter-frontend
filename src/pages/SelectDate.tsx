@@ -1,3 +1,12 @@
+import {
+  BottomNavigation,
+  Box,
+  Button,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { useState } from "react";
 import Calendar, { CalendarTileProperties } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -25,12 +34,28 @@ export default function SelectDate() {
   };
 
   return (
-    <div>
-      <Calendar
-        onChange={onChange}
-        value={null}
-        tileClassName={setTileClassName}
-      />
-    </div>
+    <Box>
+      <Stack padding={2} spacing={2} alignItems="center">
+        <Typography component="h1" variant="h4">
+          어떤 날에 만나고 싶나요?
+        </Typography>
+        <Calendar
+          onChange={onChange}
+          value={null}
+          tileClassName={setTileClassName}
+        />
+      </Stack>
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
+      >
+        <BottomNavigation>
+          <Button>
+            <Typography marginRight={1}>다음</Typography>
+            <ArrowCircleRightIcon />
+          </Button>
+        </BottomNavigation>
+      </Paper>
+    </Box>
   );
 }
