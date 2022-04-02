@@ -1,16 +1,10 @@
-import {
-  BottomNavigation,
-  Box,
-  Button,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { useState } from "react";
 import Calendar, { CalendarTileProperties } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { DateSet } from "../utils/toggleSet";
+import { BottomNavPaper } from "../components/BottomNavPaper";
 
 export default function SelectDate() {
   const [selectedDateSet, setSelectedDateSet] = useState(
@@ -45,17 +39,12 @@ export default function SelectDate() {
           tileClassName={setTileClassName}
         />
       </Stack>
-      <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-        elevation={3}
-      >
-        <BottomNavigation>
-          <Button>
-            <Typography marginRight={1}>다음</Typography>
-            <ArrowCircleRightIcon />
-          </Button>
-        </BottomNavigation>
-      </Paper>
+      <BottomNavPaper elevation={3}>
+        <Button>
+          <Typography marginRight={1}>다음</Typography>
+          <ArrowCircleRightIcon />
+        </Button>
+      </BottomNavPaper>
     </Box>
   );
 }
