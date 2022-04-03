@@ -1,10 +1,12 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import "react-calendar/dist/Calendar.css";
+
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import Calendar, { CalendarTileProperties } from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import { DateSet } from "../utils/toggleSet";
+
 import { BottomNavPaper } from "../components/BottomNavPaper";
+import { DateSet } from "../utils/toggleSet";
 
 export default function SelectDate() {
   const [selectedDateSet, setSelectedDateSet] = useState(

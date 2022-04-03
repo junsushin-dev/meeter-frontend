@@ -1,6 +1,7 @@
-import { ChangeEvent, useRef, useState } from "react";
-import TimeSlot from "../components/TimeSlot";
 import SelectionArea, { SelectionEvent } from "@viselect/react";
+import { ChangeEvent, useRef, useState } from "react";
+
+import TimeSlot from "../components/TimeSlot";
 
 const names = ["Junsu", "Junki", "Sangeun"];
 const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
