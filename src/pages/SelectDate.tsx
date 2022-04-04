@@ -4,11 +4,13 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import Calendar, { CalendarTileProperties } from "react-calendar";
+import { useNavigate } from "react-router-dom";
 
 import { BottomNavPaper } from "../components/BottomNavPaper";
 import { DateSet } from "../utils/toggleSet";
 
 export default function SelectDate() {
+  const navigate = useNavigate();
   const [selectedDateSet, setSelectedDateSet] = useState(
     new DateSet([new Date()])
   );
@@ -29,6 +31,10 @@ export default function SelectDate() {
     }
   };
 
+  const handleNextButtonClick = () => {
+    navigate("/create");
+  };
+
   return (
     <Box>
       <Stack padding={2} spacing={2} alignItems="center">
@@ -42,7 +48,7 @@ export default function SelectDate() {
         />
       </Stack>
       <BottomNavPaper elevation={3}>
-        <Button>
+        <Button onClick={handleNextButtonClick}>
           <Typography marginRight={1}>다음</Typography>
           <ArrowCircleRightIcon />
         </Button>
