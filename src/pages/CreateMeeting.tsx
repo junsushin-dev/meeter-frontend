@@ -1,9 +1,17 @@
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import { BottomNavPaper } from "../components/BottomNavPaper";
 
 export default function CreateMeeting() {
+  const navigate = useNavigate();
+
+  const handleNextButtonClick = () => {
+    // TODO: Apply meetingId path param
+    navigate("/meeting");
+  };
+
   return (
     <Box>
       <Stack padding={2} spacing={2} alignItems="center">
@@ -20,7 +28,7 @@ export default function CreateMeeting() {
         />
       </Stack>
       <BottomNavPaper elevation={3}>
-        <Button>
+        <Button onClick={handleNextButtonClick}>
           <Typography marginRight={1}>다음</Typography>
           <ArrowCircleRightIcon />
         </Button>
