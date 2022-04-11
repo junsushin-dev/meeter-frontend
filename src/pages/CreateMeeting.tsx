@@ -9,7 +9,7 @@ export default function CreateMeeting() {
 
   const handleNextButtonClick = () => {
     // TODO: Apply meetingId path param
-    navigate("/meeting");
+    navigate("/meeting/path-param-temp");
   };
 
   return (
