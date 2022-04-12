@@ -7,6 +7,7 @@ import Calendar, { CalendarTileProperties } from "react-calendar";
 import { useNavigate } from "react-router-dom";
 
 import { BottomNavPaper } from "../components/BottomNavPaper";
+import { useStore } from "../stores";
 import { DateSet } from "../utils/toggleSet";
 
 export default function SelectDate() {
@@ -14,6 +15,7 @@ export default function SelectDate() {
   const [selectedDateSet, setSelectedDateSet] = useState(
     new DateSet([new Date()])
   );
+  const setSeletedDates = useStore((state) => state.setSelectedDates);
 
   const onChange = (date: Date) => {
     setSelectedDateSet((prevSet) => {
@@ -32,6 +34,7 @@ export default function SelectDate() {
   };
 
   const handleNextButtonClick = () => {
+    setSeletedDates(selectedDateSet.values());
     navigate("/create");
   };
 
