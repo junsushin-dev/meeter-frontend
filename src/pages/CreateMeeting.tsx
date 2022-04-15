@@ -9,7 +9,7 @@ export default function CreateMeeting() {
   const navigate = useNavigate();
   const { title, description, setTitle, setDescription } = useStore();
 
-  const handleNextButtonClick = () => {
+  const handleNextButtonClick = async () => {
     // TODO: Apply meetingId path param
     navigate("/meeting/path-param-temp");
   };
