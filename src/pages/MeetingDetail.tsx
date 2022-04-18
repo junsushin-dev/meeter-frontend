@@ -1,10 +1,12 @@
 import SelectionArea, { SelectionEvent } from "@viselect/react";
 import { ChangeEvent, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import useSwr from "swr";
 
+import { getMeeting } from "../apis/meetings/getMeeting";
 import TimeSlot from "../components/TimeSlot";
 
 const names = ["Junsu", "Junki", "Sangeun"];
-const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const hours = new Array(24)
   .fill(0)
   .map((_, index) => index.toString().padStart(2, "0") + ":00");
@@ -19,6 +21,12 @@ export default function MeetingDetail() {
     names.map((name) => ({ name, schedule: new Set() }))
   );
   const selectedPersonIndexRef = useRef(0);
+  const { id } = useParams() as { id: string };
+  const { data: meeting } = useSwr(`/api/meetings/${id}`, () =>
+    getMeeting({ meetingUrlKey: id })
+  );
+
+  const days = meeting?.availableDates ?? [];
 
   const extractIds = (els: Element[]): string[] =>
     els
@@ -82,11 +90,11 @@ export default function MeetingDetail() {
             </div>
           ))}
         </div>
-        {days.map((dayName) => (
-          <div key={dayName} className="grid-column">
-            <div className="grid-cell">{dayName}</div>
+        {days.map((day) => (
+          <div key={day.format("YYYY-MM-DD")} className="grid-column">
+            <div className="grid-cell">{day.format("MM-DD ddd")}</div>
             {hours.map((hour) => {
-              const dataKey = `${dayName}-${hour}`;
+              const dataKey = `${day}-${hour}`;
               const selectedRatio =
                 people.filter((person) => person.schedule.has(dataKey)).length /
                 people.length;
