@@ -1,26 +1,48 @@
-import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+
+import { Meeting } from "../../types/meeting";
 
 interface GetMeetingRequestParams {
   meetingUrlKey: string;
 }
 
-interface GetMeetingResponse {
-  meetingId: number;
-  meetingTitle: string;
-  meetingDesc: string;
-  meetingUrlKey: string;
-  participants: [];
-  availableDates: Date[];
-  scheduleStart: Date;
-  scheduleEnd: Date;
-  timeRangeStart: Dayjs;
-  timeRangeEnd: Dayjs;
+interface GetMeetingResponse
+  extends Omit<
+    Meeting,
+    | "availableDates"
+    | "scheduleStart"
+    | "scheduleEnd"
+    | "timeRangeStart"
+    | "timeRangeEnd"
+  > {
+  availableDates: string[];
+  scheduleStart: string;
+  scheduleEnd: string;
+  timeRangeStart: string;
+  timeRangeEnd: string;
 }
 
 export const getMeeting = async (
   params: GetMeetingRequestParams
-): Promise<GetMeetingResponse> => {
+): Promise<Meeting> => {
   const response = await fetch(`/api/meetings/${params.meetingUrlKey}`);
+  const meetingResponseData: GetMeetingResponse = await response.json();
+  const {
+    availableDates,
+    scheduleStart,
+    scheduleEnd,
+    timeRangeStart,
+    timeRangeEnd,
+  } = meetingResponseData;
 
-  return response.json();
+  const meeting: Meeting = {
+    ...meetingResponseData,
+    availableDates: availableDates.map((dateString) => dayjs(dateString)),
+    scheduleStart: dayjs(scheduleStart),
+    scheduleEnd: dayjs(scheduleEnd),
+    timeRangeStart: dayjs(timeRangeStart),
+    timeRangeEnd: dayjs(timeRangeEnd),
+  };
+
+  return meeting;
 };
