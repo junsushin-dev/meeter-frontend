@@ -3,6 +3,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { TimePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
 
+import { createMeeting } from "../apis/meetings";
 import { BottomNavPaper } from "../components/BottomNavPaper";
 import { useStore } from "../stores";
 
@@ -13,6 +14,7 @@ export default function CreateMeeting() {
     description,
     timeRangeStart,
     timeRangeEnd,
+    dates,
     setTitle,
     setDescription,
     setTimeRangeStart,
@@ -20,8 +22,21 @@ export default function CreateMeeting() {
   } = useStore();
 
   const handleNextButtonClick = async () => {
-    // TODO: Apply meetingId path param
-    navigate("/meeting/path-param-temp");
+    if (!title || dates.length === 0 || !timeRangeStart || !timeRangeEnd)
+      return;
+
+    try {
+      const { meetingUrlKey } = await createMeeting({
+        meetingTitle: title,
+        meetingDesc: description,
+        availableDates: dates,
+        timeRangeStart,
+        timeRangeEnd,
+      });
+      navigate(`/meeting/${meetingUrlKey}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
