@@ -1,6 +1,11 @@
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 import { Meeting } from "../../types/meeting";
+
+console.log(customParseFormat);
+
+dayjs.extend(customParseFormat);
 
 interface GetMeetingRequestParams {
   meetingUrlKey: string;
@@ -40,8 +45,8 @@ export const getMeeting = async (
     availableDates: availableDates.map((dateString) => dayjs(dateString)),
     scheduleStart: dayjs(scheduleStart),
     scheduleEnd: dayjs(scheduleEnd),
-    timeRangeStart: dayjs(timeRangeStart),
-    timeRangeEnd: dayjs(timeRangeEnd),
+    timeRangeStart: dayjs(timeRangeStart, "HH:mm:ss"),
+    timeRangeEnd: dayjs(timeRangeEnd, "HH:mm:ss"),
   };
 
   return meeting;
