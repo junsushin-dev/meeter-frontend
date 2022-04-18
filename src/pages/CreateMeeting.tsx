@@ -3,7 +3,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { TimePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
 
-import { createMeeting } from "../apis/meetings";
+import { createMeeting } from "../apis/meetings/createMeeting";
 import { BottomNavPaper } from "../components/BottomNavPaper";
 import { useStore } from "../stores";
 

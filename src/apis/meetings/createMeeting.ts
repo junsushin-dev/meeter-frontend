@@ -15,7 +15,7 @@ interface CreateMeetingResponse {
 export const createMeeting = async (
   params: CreateMeetingRequestParams
 ): Promise<CreateMeetingResponse> => {
-  const response = await fetch("http://localhost:3001/api/meetings", {
+  const response = await fetch("/api/meetings", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
