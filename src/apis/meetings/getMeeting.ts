@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
 
 import { Meeting } from "../../types/meeting";
 
-console.log(customParseFormat);
-
 dayjs.extend(customParseFormat);
+dayjs.extend(utc);
 
 interface GetMeetingRequestParams {
   meetingUrlKey: string;
