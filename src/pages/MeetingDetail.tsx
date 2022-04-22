@@ -7,9 +7,6 @@ import { getMeeting } from "../apis/meetings/getMeeting";
 import TimeSlot from "../components/TimeSlot";
 
 const names = ["Junsu", "Junki", "Sangeun"];
-const hours = new Array(24)
-  .fill(0)
-  .map((_, index) => index.toString().padStart(2, "0") + ":00");
 
 interface Person {
   name: string;
@@ -26,7 +23,19 @@ export default function MeetingDetail() {
     getMeeting({ meetingUrlKey: id })
   );
 
-  const days = meeting?.availableDates ?? [];
+  if (!meeting) return null;
+
+  const days = meeting.availableDates ?? [];
+  const timeRangeStartHour = meeting.timeRangeStart.hour();
+  const timeRangeEndHour = meeting.timeRangeEnd.hour();
+  const timeRangeHourCount = timeRangeEndHour - timeRangeStartHour + 1;
+
+  const hours =
+    timeRangeHourCount > 0
+      ? new Array(timeRangeHourCount)
+          .fill(0)
+          .map((_, index) => meeting.timeRangeStart.add(index, "hour"))
+      : [];
 
   const extractIds = (els: Element[]): string[] =>
     els
@@ -85,8 +94,8 @@ export default function MeetingDetail() {
         <div className="grid-column">
           <div className="grid-cell" />
           {hours.map((hour) => (
-            <div className="grid-cell" key={hour}>
-              {hour}
+            <div className="grid-cell" key={hour.hour()}>
+              {hour.format("hh:mm")}
             </div>
           ))}
         </div>
