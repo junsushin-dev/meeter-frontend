@@ -1,3 +1,5 @@
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import SelectionArea, { SelectionEvent } from "@viselect/react";
 import { ChangeEvent, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -5,6 +7,7 @@ import useSwr from "swr";
 
 import { getMeeting } from "../apis/meetings/getMeeting";
 import TimeSlot from "../components/TimeSlot";
+import { splitAraryChunks } from "../utils/splitArrayChunks";
 
 const names = ["Junsu", "Junki", "Sangeun"];
 
@@ -26,6 +29,8 @@ export default function MeetingDetail() {
   if (!meeting) return null;
 
   const days = meeting.availableDates ?? [];
+  const dayPages = splitAraryChunks(days, 5);
+  console.log(dayPages);
   const timeRangeStartHour = meeting.timeRangeStart.hour();
   const timeRangeEndHour = meeting.timeRangeEnd.hour();
   const timeRangeHourCount = timeRangeEndHour - timeRangeStartHour + 1;
@@ -64,7 +69,6 @@ export default function MeetingDetail() {
     },
   }: SelectionEvent) => {
     setPeople((prev) => {
-      console.log(prev);
       const selectedPersonIndex = selectedPersonIndexRef.current;
       const selectedPerson = prev[selectedPersonIndex];
       const next = new Set(selectedPerson.schedule);
@@ -91,6 +95,9 @@ export default function MeetingDetail() {
         className="timetable"
         selectables=".selectable"
       >
+        <IconButton>
+          <KeyboardArrowLeft />
+        </IconButton>
         <div className="grid-column">
           <div className="grid-cell" />
           {hours.map((hour) => (
@@ -117,6 +124,9 @@ export default function MeetingDetail() {
             })}
           </div>
         ))}
+        <IconButton>
+          <KeyboardArrowRight />
+        </IconButton>
       </SelectionArea>
       <div>
         {names.map((name, index) => (
