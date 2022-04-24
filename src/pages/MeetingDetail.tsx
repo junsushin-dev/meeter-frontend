@@ -6,12 +6,12 @@ import { useParams } from "react-router-dom";
 import useSwr from "swr";
 
 import { getMeeting } from "../apis/meetings/getMeeting";
-import TimeSlot from "../components/TimeSlot";
+import DayColumn from "../components/DayColumn";
 import { splitAraryChunks } from "../utils/splitArrayChunks";
 
 const names = ["Junsu", "Junki", "Sangeun"];
 
-interface Person {
+export interface Person {
   name: string;
   schedule: Set<string>;
 }
@@ -107,22 +107,12 @@ export default function MeetingDetail() {
           ))}
         </div>
         {days.map((day) => (
-          <div key={day.format("YYYY-MM-DD")} className="grid-column">
-            <div className="grid-cell">{day.format("MM-DD ddd")}</div>
-            {hours.map((hour) => {
-              const dataKey = `${day}-${hour}`;
-              const selectedRatio =
-                people.filter((person) => person.schedule.has(dataKey)).length /
-                people.length;
-              return (
-                <TimeSlot
-                  opacity={selectedRatio}
-                  key={dataKey}
-                  dataKey={dataKey}
-                />
-              );
-            })}
-          </div>
+          <DayColumn
+            key={day.format("YYYY-MM-DD")}
+            day={day}
+            hours={hours}
+            people={people}
+          />
         ))}
         <IconButton>
           <KeyboardArrowRight />
