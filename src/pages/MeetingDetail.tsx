@@ -29,9 +29,8 @@ export default function MeetingDetail() {
 
   if (!meeting) return null;
 
-  const days = meeting.availableDates ?? [];
+  const days = meeting.availableDates.sort((a, b) => a.unix() - b.unix()) ?? [];
   const dayPages = splitAraryChunks(days, 5);
-  console.log(dayPages);
   const timeRangeStartHour = meeting.timeRangeStart.hour();
   const timeRangeEndHour = meeting.timeRangeEnd.hour();
   const timeRangeHourCount = timeRangeEndHour - timeRangeStartHour + 1;
