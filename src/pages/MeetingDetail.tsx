@@ -20,6 +20,7 @@ export default function MeetingDetail() {
   const [people, setPeople] = useState<Person[]>(
     names.map((name) => ({ name, schedule: new Set() }))
   );
+  const [dayPageIndex, setDayPageIndex] = useState(0);
   const selectedPersonIndexRef = useRef(0);
   const { id } = useParams() as { id: string };
   const { data: meeting } = useSwr(`/api/meetings/${id}`, () =>
@@ -95,7 +96,10 @@ export default function MeetingDetail() {
         className="timetable"
         selectables=".selectable"
       >
-        <IconButton>
+        <IconButton
+          disabled={dayPageIndex === 0}
+          onClick={() => setDayPageIndex((prev) => prev - 1)}
+        >
           <KeyboardArrowLeft />
         </IconButton>
         <div className="grid-column">
@@ -106,7 +110,7 @@ export default function MeetingDetail() {
             </div>
           ))}
         </div>
-        {days.map((day) => (
+        {dayPages[dayPageIndex].map((day) => (
           <DayColumn
             key={day.format("YYYY-MM-DD")}
             day={day}
@@ -114,7 +118,10 @@ export default function MeetingDetail() {
             people={people}
           />
         ))}
-        <IconButton>
+        <IconButton
+          disabled={dayPageIndex >= dayPages.length - 1}
+          onClick={() => setDayPageIndex((prev) => prev + 1)}
+        >
           <KeyboardArrowRight />
         </IconButton>
       </SelectionArea>
