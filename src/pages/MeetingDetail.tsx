@@ -105,7 +105,7 @@ export default function MeetingDetail() {
           <div className="grid-cell" />
           {hours.map((hour) => (
             <div className="grid-cell" key={hour.hour()}>
-              {hour.format("hh:mm")}
+                {hour.format("HH:mm")}
             </div>
           ))}
         </div>
