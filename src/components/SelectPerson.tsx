@@ -1,7 +1,7 @@
 import { ChangeEventHandler } from "react";
 
 interface SelectPersonProps {
-  selectedName: string;
+  selectedName?: string;
   names: string[];
   handleChange: ChangeEventHandler<HTMLInputElement>;
 }
@@ -20,7 +20,7 @@ export default function SelectPerson({
             id={`name-${name}`}
             name="name"
             value={name}
-            defaultChecked={name === selectedName}
+            checked={name === selectedName}
             onChange={handleChange}
           />
           <label htmlFor={`name-${name}`}>{name}</label>

@@ -8,6 +8,7 @@ import useSwr from "swr";
 import { getMeeting } from "../apis/meetings/getMeeting";
 import DayColumn from "../components/DayColumn";
 import SelectPerson from "../components/SelectPerson";
+import SelectPersonDialog from "../components/SelectPersonDialog";
 import { createInitialPersonMap } from "../utils/createInitialPersonMap";
 import { splitAraryChunks } from "../utils/splitArrayChunks";
 
@@ -24,10 +25,11 @@ export default function MeetingDetail() {
   const [people, setPeople] = useState<PersonMap>(
     createInitialPersonMap(names)
   );
-
   const [dayPageIndex, setDayPageIndex] = useState(0);
+  const [selectPersonDialogOpen, setSelectPersonDialogOpen] = useState(false);
   // Use ref to prevent SelectionArea from being rerendered, which resets selection state
-  const selectedPersonNameRef = useRef(names[0]);
+  const selectedPersonNameRef = useRef<string>();
+  const [selectedPersonName, setSelectedPersonName] = useState<string>();
   const { id } = useParams() as { id: string };
   const { data: meeting } = useSwr(`/api/meetings/${id}`, () =>
     getMeeting({ meetingUrlKey: id })
@@ -55,10 +57,15 @@ export default function MeetingDetail() {
       .map(String);
 
   const onStart = ({ event, selection }: SelectionEvent) => {
+    const selectedPersonName = selectedPersonNameRef.current;
+    if (selectedPersonName === undefined) {
+      setSelectPersonDialogOpen(true);
+      return;
+    }
+
     if (!event?.ctrlKey && !event?.metaKey) {
       selection.clearSelection();
       setPeople((prev) => {
-        const selectedPersonName = selectedPersonNameRef.current;
         const selectedPerson = prev[selectedPersonName];
         return {
           ...prev,
@@ -73,8 +80,13 @@ export default function MeetingDetail() {
       changed: { added, removed },
     },
   }: SelectionEvent) => {
+    const selectedPersonName = selectedPersonNameRef.current;
+    if (selectedPersonName === undefined) {
+      setSelectPersonDialogOpen(true);
+      return;
+    }
+
     setPeople((prev) => {
-      const selectedPersonName = selectedPersonNameRef.current;
       const selectedPerson = prev[selectedPersonName];
       const next = new Set(selectedPerson.schedule);
       extractIds(added).forEach((id) => next.add(id));
@@ -89,6 +101,8 @@ export default function MeetingDetail() {
   const handlePersonChange = (event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
     selectedPersonNameRef.current = name;
+    setSelectedPersonName(name);
+    setSelectPersonDialogOpen(false);
   };
 
   return (
@@ -130,9 +144,15 @@ export default function MeetingDetail() {
           </IconButton>
         </SelectionArea>
         <SelectPerson
-          selectedName={selectedPersonNameRef.current}
+          selectedName={selectedPersonName}
           names={names}
           handleChange={handlePersonChange}
+        />
+        <SelectPersonDialog
+          open={selectPersonDialogOpen}
+          onChange={handlePersonChange}
+          selectedName={selectedPersonName}
+          names={names}
         />
       </Stack>
     </div>
