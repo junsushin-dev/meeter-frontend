@@ -1,7 +1,7 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import SelectionArea, { SelectionEvent } from "@viselect/react";
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useSwr from "swr";
 
@@ -98,8 +98,7 @@ export default function MeetingDetail() {
     });
   };
 
-  const handlePersonChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value;
+  const handlePersonChange = (name: string) => {
     selectedPersonNameRef.current = name;
     setSelectedPersonName(name);
     setSelectPersonDialogOpen(false);

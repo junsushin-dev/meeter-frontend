@@ -1,9 +1,17 @@
-import { ChangeEventHandler } from "react";
+import { Person as PersonIcon } from "@mui/icons-material";
+import {
+  Avatar,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
 interface SelectPersonProps {
   selectedName?: string;
   names: string[];
-  handleChange: ChangeEventHandler<HTMLInputElement>;
+  handleChange: (name: string) => void;
 }
 
 export default function SelectPerson({
@@ -12,20 +20,22 @@ export default function SelectPerson({
   handleChange,
 }: SelectPersonProps) {
   return (
-    <div>
+    <List>
       {names.map((name, index) => (
-        <div key={name}>
-          <input
-            type="radio"
-            id={`name-${name}`}
-            name="name"
-            value={name}
-            checked={name === selectedName}
-            onChange={handleChange}
-          />
-          <label htmlFor={`name-${name}`}>{name}</label>
-        </div>
+        <ListItem key={name} disablePadding>
+          <ListItemButton
+            onClick={() => handleChange(name)}
+            selected={selectedName === name}
+          >
+            <ListItemIcon>
+              <Avatar>
+                <PersonIcon />
+              </Avatar>
+            </ListItemIcon>
+            <ListItemText>{name}</ListItemText>
+          </ListItemButton>
+        </ListItem>
       ))}
-    </div>
+    </List>
   );
 }
