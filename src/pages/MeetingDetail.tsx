@@ -104,6 +104,20 @@ export default function MeetingDetail() {
     setSelectPersonDialogOpen(false);
   };
 
+  const handleAddPerson = (name: string) => {
+    const newPerson = {
+      name,
+      schedule: new Set<string>(),
+    };
+
+    setPeople((prev) => ({
+      ...prev,
+      [name]: newPerson,
+    }));
+
+    setSelectPersonDialogOpen(false);
+  };
+
   return (
     <div className="App">
       <Stack padding={2} spacing={2} alignItems="center">
@@ -144,14 +158,15 @@ export default function MeetingDetail() {
         </SelectionArea>
         <SelectPerson
           selectedName={selectedPersonName}
-          names={names}
+          names={Object.keys(people)}
           handleChange={handlePersonChange}
         />
         <SelectPersonDialog
           open={selectPersonDialogOpen}
           onChange={handlePersonChange}
+          onAddPerson={handleAddPerson}
           selectedName={selectedPersonName}
-          names={names}
+          names={Object.keys(people)}
         />
       </Stack>
     </div>

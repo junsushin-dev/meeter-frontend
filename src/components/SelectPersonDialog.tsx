@@ -7,12 +7,14 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import { useState } from "react";
 
 import SelectPerson from "./SelectPerson";
 
 interface SelectPersonDialogProps {
   open: boolean;
   onChange: (name: string) => void;
+  onAddPerson: (name: string) => void;
   selectedName?: string;
   names: string[];
 }
@@ -20,9 +22,16 @@ interface SelectPersonDialogProps {
 export default function SelectPersonDialog({
   open,
   onChange,
+  onAddPerson,
   selectedName,
   names,
 }: SelectPersonDialogProps) {
+  const [newPersonNameInputValue, setNewPersonNameInputValue] = useState("");
+
+  const handleAddButtonClick = () => {
+    onAddPerson(newPersonNameInputValue);
+  };
+
   return (
     <Dialog open={open}>
       <DialogTitle>참여자 선택 또는 생성</DialogTitle>
@@ -41,10 +50,14 @@ export default function SelectPersonDialog({
             columnGap: 2,
           }}
         >
-          <Avatar>
+          <Avatar onClick={handleAddButtonClick}>
             <PersonAddIcon />
           </Avatar>
-          <TextField id="new-name" label="새로운 참가자 이름" />
+          <TextField
+            id="new-person-name"
+            label="새로운 참가자 이름"
+            onChange={(event) => setNewPersonNameInputValue(event.target.value)}
+          />
         </Box>
       </DialogContent>
     </Dialog>
