@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  IconButton,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
@@ -45,14 +46,16 @@ export default function SelectPersonDialog({
           sx={{
             display: "flex",
             alignItems: "center",
-            paddingX: 2,
-            paddingY: 1,
-            columnGap: 2,
+            paddingX: 1,
+            paddingY: 0,
+            columnGap: 1,
           }}
         >
-          <Avatar onClick={handleAddButtonClick}>
-            <PersonAddIcon />
-          </Avatar>
+          <IconButton onClick={handleAddButtonClick}>
+            <Avatar>
+              <PersonAddIcon />
+            </Avatar>
+          </IconButton>
           <TextField
             id="new-person-name"
             label="새로운 참가자 이름"
