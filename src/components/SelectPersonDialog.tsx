@@ -8,6 +8,7 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
+import { blue } from "@mui/material/colors";
 import { useState } from "react";
 
 import SelectPerson from "./SelectPerson";
@@ -52,7 +53,7 @@ export default function SelectPersonDialog({
           }}
         >
           <IconButton onClick={handleAddButtonClick}>
-            <Avatar>
+            <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
               <PersonAddIcon />
             </Avatar>
           </IconButton>

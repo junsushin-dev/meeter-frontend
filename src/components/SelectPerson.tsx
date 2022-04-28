@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { blue } from "@mui/material/colors";
 
 interface SelectPersonProps {
   selectedName?: string;
@@ -28,7 +29,7 @@ export default function SelectPerson({
             selected={selectedName === name}
           >
             <ListItemIcon>
-              <Avatar>
+              <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
                 <PersonIcon />
               </Avatar>
             </ListItemIcon>
