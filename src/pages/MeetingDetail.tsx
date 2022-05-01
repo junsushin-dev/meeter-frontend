@@ -9,21 +9,14 @@ import { getMeeting } from "../apis/meetings/getMeeting";
 import DayColumn from "../components/DayColumn";
 import SelectPerson from "../components/SelectPerson";
 import SelectPersonDialog from "../components/SelectPersonDialog";
-import { createInitialPersonMap } from "../utils/createInitialPersonMap";
+import { Participant } from "../types/participant";
 import { splitAraryChunks } from "../utils/splitArrayChunks";
 
 const names = ["Junsu", "Junki", "Sangeun"];
 
-export interface Person {
-  name: string;
-  schedule: Set<string>;
-}
-
-export type PersonMap = Record<string, Person>;
-
 export default function MeetingDetail() {
-  const [people, setPeople] = useState<PersonMap>(
-    createInitialPersonMap(names)
+  const [participants, setParticipants] = useState<Participant[]>(
+    names.map((name) => ({ name, timeslots: new Set() }))
   );
   const [dayPageIndex, setDayPageIndex] = useState(0);
   const [selectPersonDialogOpen, setSelectPersonDialogOpen] = useState(false);
@@ -65,12 +58,17 @@ export default function MeetingDetail() {
 
     if (!event?.ctrlKey && !event?.metaKey) {
       selection.clearSelection();
-      setPeople((prev) => {
-        const selectedPerson = prev[selectedPersonName];
-        return {
-          ...prev,
-          [selectedPersonName]: { ...selectedPerson, schedule: new Set() },
-        };
+      setParticipants((prev) => {
+        const selectedPersonIndex = prev.findIndex(
+          (p) => p.name === selectedPersonName
+        );
+        const selectedPerson = prev[selectedPersonIndex];
+        if (!selectedPerson) return prev;
+        return [
+          ...prev.slice(0, selectedPersonIndex),
+          { ...selectedPerson, timeslots: new Set() },
+          ...prev.slice(selectedPersonIndex + 1),
+        ];
       });
     }
   };
@@ -86,15 +84,20 @@ export default function MeetingDetail() {
       return;
     }
 
-    setPeople((prev) => {
-      const selectedPerson = prev[selectedPersonName];
-      const next = new Set(selectedPerson.schedule);
+    setParticipants((prev) => {
+      const selectedPersonIndex = prev.findIndex(
+        (p) => p.name === selectedPersonName
+      );
+      const selectedPerson = prev[selectedPersonIndex];
+      if (!selectedPerson) return prev;
+      const next = new Set(selectedPerson.timeslots);
       extractIds(added).forEach((id) => next.add(id));
       extractIds(removed).forEach((id) => next.delete(id));
-      return {
-        ...prev,
-        [selectedPersonName]: { ...selectedPerson, schedule: next },
-      };
+      return [
+        ...prev.slice(0, selectedPersonIndex),
+        { ...selectedPerson, timeslots: next },
+        ...prev.slice(selectedPersonIndex + 1),
+      ];
     });
   };
 
@@ -107,14 +110,10 @@ export default function MeetingDetail() {
   const handleAddPerson = (name: string) => {
     const newPerson = {
       name,
-      schedule: new Set<string>(),
+      timeslots: new Set<string>(),
     };
 
-    setPeople((prev) => ({
-      ...prev,
-      [name]: newPerson,
-    }));
-
+    setParticipants((prev) => [...prev, newPerson]);
     setSelectPersonDialogOpen(false);
   };
 
@@ -146,7 +145,7 @@ export default function MeetingDetail() {
               key={day.format("YYYY-MM-DD")}
               day={day}
               hours={hours}
-              personMap={people}
+              participants={participants}
             />
           ))}
           <IconButton
@@ -158,7 +157,7 @@ export default function MeetingDetail() {
         </SelectionArea>
         <SelectPerson
           selectedName={selectedPersonName}
-          names={Object.keys(people)}
+          names={participants.map((p) => p.name)}
           handleChange={handlePersonChange}
         />
         <SelectPersonDialog
@@ -166,7 +165,7 @@ export default function MeetingDetail() {
           onChange={handlePersonChange}
           onAddPerson={handleAddPerson}
           selectedName={selectedPersonName}
-          names={Object.keys(people)}
+          names={participants.map((p) => p.name)}
         />
       </Stack>
     </div>
