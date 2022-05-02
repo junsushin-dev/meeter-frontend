@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import useSwr from "swr";
 
 import { getMeeting } from "../apis/meetings/getMeeting";
+import { createParticipant } from "../apis/participants/createParticipant";
 import DayColumn from "../components/DayColumn";
 import SelectPerson from "../components/SelectPerson";
 import SelectPersonDialog from "../components/SelectPersonDialog";
@@ -23,9 +24,9 @@ export default function MeetingDetail() {
   // Use ref to prevent SelectionArea from being rerendered, which resets selection state
   const selectedPersonNameRef = useRef<string>();
   const [selectedPersonName, setSelectedPersonName] = useState<string>();
-  const { id } = useParams() as { id: string };
-  const { data: meeting } = useSwr(`/api/meetings/${id}`, () =>
-    getMeeting({ meetingUrlKey: id })
+  const { id: meetingUrlKey } = useParams() as { id: string };
+  const { data: meeting } = useSwr(`/api/meetings/${meetingUrlKey}`, () =>
+    getMeeting({ meetingUrlKey })
   );
 
   if (!meeting) return null;
@@ -113,6 +114,7 @@ export default function MeetingDetail() {
       timeslots: new Set<string>(),
     };
 
+    createParticipant({ meetingUrlKey, name });
     setParticipants((prev) => [...prev, newPerson]);
     setSelectPersonDialogOpen(false);
   };
