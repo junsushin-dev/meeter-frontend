@@ -1,7 +1,7 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import SelectionArea, { SelectionEvent } from "@viselect/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useSwr from "swr";
 
@@ -13,12 +13,8 @@ import SelectPersonDialog from "../components/SelectPersonDialog";
 import { Participant } from "../types/participant";
 import { splitAraryChunks } from "../utils/splitArrayChunks";
 
-const names = ["Junsu", "Junki", "Sangeun"];
-
 export default function MeetingDetail() {
-  const [participants, setParticipants] = useState<Participant[]>(
-    names.map((name) => ({ name, timeslots: new Set() }))
-  );
+  const [participants, setParticipants] = useState<Participant[]>([]);
   const [dayPageIndex, setDayPageIndex] = useState(0);
   const [selectPersonDialogOpen, setSelectPersonDialogOpen] = useState(false);
   // Use ref to prevent SelectionArea from being rerendered, which resets selection state
@@ -28,6 +24,15 @@ export default function MeetingDetail() {
   const { data: meeting } = useSwr(`/api/meetings/${meetingUrlKey}`, () =>
     getMeeting({ meetingUrlKey })
   );
+
+  useEffect(() => {
+    if (!meeting) return;
+    const initialParticipants = meeting.participants.map((p) => ({
+      name: p.name,
+      timeslots: new Set<string>(),
+    }));
+    setParticipants(initialParticipants);
+  }, [meeting]);
 
   if (!meeting) return null;
 
